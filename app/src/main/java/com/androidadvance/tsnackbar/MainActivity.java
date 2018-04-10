@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,15 +22,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button_example_1 = (Button) findViewById(R.id.button_example_1);
-        Button button_example_2 = (Button) findViewById(R.id.button_example_2);
-        Button button_example_3 = (Button) findViewById(R.id.button_example_3);
-        Button button_example_4 = (Button) findViewById(R.id.button_example_4);
-        Button button_example_5 = (Button) findViewById(R.id.button_example_5);
-        Button button_example_6 = (Button) findViewById(R.id.button_example_6);
+        Button button_example_1 = findViewById(R.id.button_example_1);
+        Button button_example_2 = findViewById(R.id.button_example_2);
+        Button button_example_3 = findViewById(R.id.button_example_3);
+        Button button_example_4 = findViewById(R.id.button_example_4);
+        Button button_example_5 = findViewById(R.id.button_example_5);
+        Button button_example_6 = findViewById(R.id.button_example_6);
 
 
-        relative_layout_main = (RelativeLayout) findViewById(R.id.relative_layout_main);
+        relative_layout_main = findViewById(R.id.relative_layout_main);
 
         button_example_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.addIcon(R.mipmap.ic_core, 200);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#555555"));
-                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
                 snackbar.show();
 
@@ -70,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 TSnackbar snackbar = TSnackbar
-                        .make(relative_layout_main, "Had a snack at Snackbar", TSnackbar.LENGTH_LONG)
+                        .make(relative_layout_main, "Had qweffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa snack at Snackbar",
+                                TSnackbar.LENGTH_LONG, LinearLayout.VERTICAL)
                         .setAction("Action", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setActionTextColor(Color.WHITE);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#0000CC"));
-                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.WHITE);
                 snackbar.show();
 
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setActionTextColor(Color.WHITE);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#CC00CC"));
-                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.YELLOW);
                 snackbar.show();
 
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setIconLeft(R.drawable.ic_android_green_24dp, 24);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#CC00CC"));
-                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.YELLOW);
                 snackbar.show();
 
@@ -129,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                 TSnackbar snackbar = TSnackbar
-                        .make(relative_layout_main, "Snacking Left & Right", TSnackbar.LENGTH_LONG);
+                        .make(relative_layout_main, "Snacking Left & Right",
+                                TSnackbar.LENGTH_LONG);
                 snackbar.setActionTextColor(Color.WHITE);
                 snackbar.setIconLeft(R.mipmap.ic_core, 24); //Size in dp - 24 is great!
                 snackbar.setIconRight(R.drawable.ic_android_green_24dp, 48); //Resize to bigger dp
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.setMaxWidth(3000);
                 View snackbarView = snackbar.getView();
                 snackbarView.setBackgroundColor(Color.parseColor("#CC00CC"));
-                TextView textView = (TextView) snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
+                TextView textView = snackbarView.findViewById(com.androidadvance.topsnackbar.R.id.snackbar_text);
                 textView.setTextColor(Color.YELLOW);
                 snackbar.show();
 

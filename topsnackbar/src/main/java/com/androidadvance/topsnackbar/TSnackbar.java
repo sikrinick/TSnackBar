@@ -20,7 +20,6 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -85,7 +84,12 @@ public final class TSnackbar {
     public @interface Duration {
     }
 
-    
+    @IntDef({LinearLayout.VERTICAL, LinearLayout.HORIZONTAL, DEFAULT_ORIENTATION})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Orientation {
+    }
+
+
     public static final int LENGTH_INDEFINITE = -2;
 
     
@@ -100,6 +104,8 @@ public final class TSnackbar {
     private static final Handler sHandler;
     private static final int MSG_SHOW = 0;
     private static final int MSG_DISMISS = 1;
+
+    private static final int DEFAULT_ORIENTATION = -1;
 
     static {
         sHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -123,6 +129,7 @@ public final class TSnackbar {
     private final SnackbarLayout mView;
     private int mDuration;
     private Callback mCallback;
+    private int mOrientation;
 
     private TSnackbar(ViewGroup parent) {
         mParent = parent;
@@ -131,21 +138,37 @@ public final class TSnackbar {
         mView = (SnackbarLayout) inflater.inflate(R.layout.tsnackbar_layout, mParent, false);
     }
 
-    
     @NonNull
     public static TSnackbar make(@NonNull View view, @NonNull CharSequence text,
                                  @Duration int duration) {
+        return make(view, text, duration, DEFAULT_ORIENTATION);
+    }
+
+
+    @NonNull
+    public static TSnackbar make(@NonNull View view, @NonNull CharSequence text,
+                                 @Duration int duration, @Orientation int orientation) {
         TSnackbar snackbar = new TSnackbar(findSuitableParent(view));
         snackbar.setText(text);
         snackbar.setDuration(duration);
+        snackbar.setOrientation(orientation);
         return snackbar;
     }
 
+    @NonNull
+    public static TSnackbar make(@NonNull View view,
+                                 @StringRes int resId,
+                                 @Duration int duration) {
+        return make(view, resId, duration, DEFAULT_ORIENTATION);
+    }
     
     @NonNull
-    public static TSnackbar make(@NonNull View view, @StringRes int resId, @Duration int duration) {
+    public static TSnackbar make(@NonNull View view,
+                                 @StringRes int resId,
+                                 @Duration int duration,
+                                 @Orientation int orientation) {
         return make(view, view.getResources()
-                .getText(resId), duration);
+                .getText(resId), duration, orientation);
     }
 
     private static ViewGroup findSuitableParent(View view) {
@@ -271,6 +294,7 @@ public final class TSnackbar {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static Bitmap getBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -354,6 +378,16 @@ public final class TSnackbar {
         return mDuration;
     }
 
+    @NonNull
+    public TSnackbar setOrientation(@Orientation int mOrientation) {
+        mView.mOrientation = mOrientation;
+        return this;
+    }
+
+    @Orientation
+    public int getOrientation() {
+      return mView.mOrientation;
+    }
     
     @NonNull
     public View getView() {
@@ -620,6 +654,7 @@ public final class TSnackbar {
 
         private int mMaxWidth;
         private int mMaxInlineActionWidth;
+        private int mOrientation;
 
         interface OnLayoutChangeListener {
             void onLayoutChange(View view, int left, int top, int right, int bottom);
@@ -694,8 +729,10 @@ public final class TSnackbar {
                     .getLineCount() > 1;
 
             boolean remeasure = false;
-            if (isMultiLine && mMaxInlineActionWidth > 0
-                    && mActionView.getMeasuredWidth() > mMaxInlineActionWidth) {
+            if ((isMultiLine && mMaxInlineActionWidth > 0
+                    && mActionView.getMeasuredWidth() > mMaxInlineActionWidth
+                    && mOrientation != HORIZONTAL)
+                    || mOrientation == VERTICAL) {
                 if (updateViewsWithinLayout(VERTICAL, multiLineVPadding,
                         multiLineVPadding - singleLineVPadding)) {
                     remeasure = true;
@@ -713,7 +750,7 @@ public final class TSnackbar {
         }
 
         void animateChildrenIn(int delay, int duration) {
-            ViewCompat.setAlpha(mMessageView, 0f);
+            mMessageView.setAlpha(0f);
             ViewCompat.animate(mMessageView)
                     .alpha(1f)
                     .setDuration(duration)
@@ -721,7 +758,7 @@ public final class TSnackbar {
                     .start();
 
             if (mActionView.getVisibility() == VISIBLE) {
-                ViewCompat.setAlpha(mActionView, 0f);
+                mActionView.setAlpha(0f);
                 ViewCompat.animate(mActionView)
                         .alpha(1f)
                         .setDuration(duration)
@@ -731,7 +768,7 @@ public final class TSnackbar {
         }
 
         void animateChildrenOut(int delay, int duration) {
-            ViewCompat.setAlpha(mMessageView, 1f);
+            mMessageView.setAlpha(1f);
             ViewCompat.animate(mMessageView)
                     .alpha(0f)
                     .setDuration(duration)
@@ -739,7 +776,7 @@ public final class TSnackbar {
                     .start();
 
             if (mActionView.getVisibility() == VISIBLE) {
-                ViewCompat.setAlpha(mActionView, 1f);
+                mActionView.setAlpha(1f);
                 ViewCompat.animate(mActionView)
                         .alpha(0f)
                         .setDuration(duration)
