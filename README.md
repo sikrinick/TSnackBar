@@ -1,5 +1,7 @@
 Top Snackbar
 ==========================
+FORK!
+1. Added orientation support.
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-TSnackBar-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2779)
 
